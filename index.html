@@ -145,7 +145,7 @@
       } else if (attempts === 0) {
         document.getElementById('remaining-codes').innerHTML = "<span style='color: red;'>Игра проиграна! Код не найден.</span>";
       } else {
-        document.getElementById('remaining-codes').innerHTML = `Возможные коды: ${possibleCodes.length}<br>Следующий вариант: ${possibleCodes[0].join('')}`;
+        document.getElementById('remaining-codes').innerHTML = `Possible codes: ${possibleCodes.length}<br>Next option: ${possibleCodes[0].join('')}`;
       }
 
       // Очищаем поля ввода
