@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unlock code</title>
   <style>
@@ -45,21 +46,21 @@
 <body>
 
   <div id="game-container">
-    <h2>Подбор кода замка</h2>
+    <h2>Selecting a lock code</h2>
 
-    <h3>Введите ваш вариант:</h3>
+    <h3>Enter your option:</h3>
     <input type="text" id="digit1" maxlength="1" oninput="validateInput(this)">
     <input type="text" id="digit2" maxlength="1" oninput="validateInput(this)">
     <input type="text" id="digit3" maxlength="1" oninput="validateInput(this)">
 
     <br><br>
-    <label>Сколько цифр угадано?</label>
+    <label>How many numbers are guessed?</label>
     <input type="number" id="correctCount" min="0" max="3">
 
     <br>
-    <button onclick="checkGuess()">Проверить</button>
+    <button onclick="checkGuess()">Check</button>
 
-    <p>Осталось попыток: <strong id="attempts-left">9</strong></p>
+    <p>Attempts left: <strong id="attempts-left">9</strong></p>
     <p id="remaining-codes"></p>
   </div>
 
@@ -96,7 +97,7 @@
       let correctCount = parseInt(document.getElementById('correctCount').value);
 
       if (isNaN(digit1) || isNaN(digit2) || isNaN(digit3) || isNaN(correctCount)) {
-        alert("Введите все числа!");
+        alert("Enter all numbers!");
         return;
       }
 
