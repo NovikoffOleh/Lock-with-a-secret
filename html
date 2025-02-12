@@ -48,9 +48,9 @@
     <h2>Подбор кода замка</h2>
 
     <h3>Введите ваш вариант:</h3>
-    <input type="number" id="digit1" min="0" max="9">
-    <input type="number" id="digit2" min="0" max="9">
-    <input type="number" id="digit3" min="0" max="9">
+    <input type="text" id="digit1" maxlength="1" oninput="validateInput(this)">
+    <input type="text" id="digit2" maxlength="1" oninput="validateInput(this)">
+    <input type="text" id="digit3" maxlength="1" oninput="validateInput(this)">
 
     <br><br>
     <label>Сколько цифр угадано?</label>
@@ -66,20 +66,25 @@
   <script>
     let attempts = 9;
     let possibleCodes = generateAllPossibleCodes();
-    let eliminatedDigits = new Set(); // Множество исключенных цифр
+    let eliminatedDigits = new Set(); // Храним исключенные цифры
+    let usedDigits = new Set(); // Цифры, которые точно есть в коде
 
     function generateAllPossibleCodes() {
       let codes = [];
       for (let i = 0; i <= 9; i++) {
         for (let j = 0; j <= 9; j++) {
           for (let k = 0; k <= 9; k++) {
-            if (i !== j && j !== k && i !== k) { // Без повторяющихся цифр
+            if (i !== j && j !== k && i !== k) { // Без повторений
               codes.push([i, j, k]);
             }
           }
         }
       }
       return codes;
+    }
+
+    function validateInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // Убираем нечисловые символы
     }
 
     function checkGuess() {
@@ -98,22 +103,29 @@
       let guess = [digit1, digit2, digit3];
 
       if (correctCount === 0) {
-        // Если угадано 0 цифр, исключаем все три цифры
+        // Если угадано 0 цифр, полностью исключаем эти цифры
         eliminatedDigits.add(digit1);
         eliminatedDigits.add(digit2);
         eliminatedDigits.add(digit3);
+      } else {
+        // Если угадано хотя бы 1 число, оно точно есть в коде
+        for (let num of guess) {
+          if (!eliminatedDigits.has(num)) {
+            usedDigits.add(num);
+          }
+        }
       }
 
       // Фильтруем возможные коды
       possibleCodes = possibleCodes.filter(code => {
-        // Проверяем, нет ли запрещенных цифр в коде
+        // Удаляем коды, содержащие исключенные цифры
         for (let num of code) {
           if (eliminatedDigits.has(num)) {
             return false;
           }
         }
 
-        // Проверяем совпадение количества угаданных цифр
+        // Проверяем, сколько цифр из текущего кода совпадает с введенными
         let matchCount = 0;
         for (let num of guess) {
           if (code.includes(num)) {
@@ -132,8 +144,14 @@
       } else if (attempts === 0) {
         document.getElementById('remaining-codes').innerHTML = "<span style='color: red;'>Игра проиграна! Код не найден.</span>";
       } else {
-        document.getElementById('remaining-codes').innerHTML = `Возможные коды: ${possibleCodes.length}`;
+        document.getElementById('remaining-codes').innerHTML = `Возможные коды: ${possibleCodes.length}<br>Следующий вариант: ${possibleCodes[0].join('')}`;
       }
+
+      // Очищаем поля ввода
+      document.getElementById('digit1').value = "";
+      document.getElementById('digit2').value = "";
+      document.getElementById('digit3').value = "";
+      document.getElementById('correctCount').value = "";
     }
   </script>
 
